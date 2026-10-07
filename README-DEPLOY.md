@@ -1,6 +1,34 @@
 # 🚀 Hướng dẫn Deploy lên Internet
 
-Deploy dự án Cinestar lên cloud với **chi phí 0đ** (dùng free tier), tách 3 phần:
+> ## ⚡ PHƯƠNG ÁN MIỄN PHÍ TRỌN VẸN (khuyên dùng thử trước)
+>
+> **Render (backend) + Neon (PostgreSQL) + Upstash (Redis) + Vercel (web)** — tất cả free, không cần thẻ:
+>
+> 1. **Push code lên GitHub** (Bước 0 bên dưới)
+> 2. **Neon** — [neon.tech](https://neon.tech) → Create project → copy *Connection string*
+>    → đổi thành JDBC: `jdbc:postgresql://ep-xxx.aws.neon.tech/neondb?sslmode=require`
+>    (user/password nằm trong chuỗi, tách ra 2 biến riêng)
+> 3. **Upstash** — [console.upstash.com](https://console.upstash.com) → **Redis → Create** (Region gần VN: ap-southeast-1)
+>    → copy **Host**, **Port 6379**, **Password**
+> 4. **Render** — [dashboard.render.com](https://dashboard.render.com) → **New → Blueprint** → chọn repo
+>    (Render đọc sẵn file `render.yaml` của dự án: Docker + rootDir `javabackend` + health check)
+>    → điền các biến `sync: false` mà nó hỏi:
+>    - `DB_URL` = chuỗi JDBC Neon ở trên (kèm `?sslmode=require`)
+>    - `DB_USERNAME` / `DB_PASSWORD` = của Neon
+>    - `REDIS_HOST` / `SPRING_DATA_REDIS_PASSWORD` = của Upstash (đã có sẵn `SSL=true`)
+>    - `JWT_SECRET` = chuỗi bí mật bất kỳ ≥ 32 ký tự
+>    - `VNPAY_TMN_CODE` / `VNPAY_HASH_SECRET` = trong file `.env` local
+>    - `VNPAY_RETURN_URL` = `https://<ten-web>.vercel.app/payment/result` (điền sau, sửa lại được)
+>    - `VNPAY_IPN_URL` = `https://cinestar-backend.onrender.com/api/v1/payments/vnpay/ipn`
+>    - Các biến Kafka cứ để trống (listener đã cấu hình auto-startup=false)
+> 5. **Create Resources** → Render build Docker (~10-15 phút lần đầu) → nhận URL
+>    `https://cinestar-backend.onrender.com` → test: mở `/swagger-ui.html`
+> 6. Quay lại **Vercel**: biến `VITE_API_URL` = URL trên → Redeploy web → hoàn tất
+>
+> ⚠️ Gói free của Render: service **ngủ sau 15 phút không ai gọi** (lần truy cập sau chờ ~1 phút
+> dậy) — chấp nhận được cho demo; 512MB RAM đủ cho Spring Boot của dự án.
+
+Deploy dự án Cinestar lên cloud, tách 3 phần:
 
 | Thành phần | Nơi deploy | Lý do |
 |---|---|---|
