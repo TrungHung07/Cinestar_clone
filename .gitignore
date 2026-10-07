@@ -1,0 +1,22 @@
+# Secrets
+.env
+
+# Node
+node_modules/
+web/dist/
+frontend/.expo/
+frontend/node_modules/
+
+# Build
+javabackend/target/
+javabackend/.mvn/wrapper/maven-wrapper.jar
+
+# IDE / OS
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Logs / temp
+*.log

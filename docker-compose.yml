@@ -1,0 +1,90 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: cinestar-postgres
+    environment:
+      POSTGRES_DB: cinestar
+      POSTGRES_USER: cinestar
+      POSTGRES_PASSWORD: cinestar
+    ports:
+      # 5433 tren may host de tranh xung dot voi PostgreSQL service cua Windows (5432)
+      - "5433:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cinestar -d cinestar"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: cinestar-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  kafka:
+    image: apache/kafka:3.8.0
+    container_name: cinestar-kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      # HOST listener cho may local (localhost:9092), INSIDE cho cac container (kafka:29092)
+      KAFKA_LISTENERS: INSIDE://:29092,CONTROLLER://:9093,HOST://:9092
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:29092,HOST://localhost:9092
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,INSIDE:PLAINTEXT,HOST:PLAINTEXT
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    volumes:
+      - kafka-data:/var/lib/kafka/data
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/kafka/bin/kafka-broker-api-versions.sh --bootstrap-server localhost:9092 > /dev/null 2>&1"]
+      interval: 10s
+      timeout: 10s
+      retries: 15
+
+  backend:
+    build: ./javabackend
+    container_name: cinestar-backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    environment:
+      TZ: Asia/Ho_Chi_Minh
+      DB_URL: jdbc:postgresql://postgres:5432/cinestar
+      DB_USERNAME: cinestar
+      DB_PASSWORD: cinestar
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      JWT_SECRET: cinestar-demo-secret-key-change-me-in-production-0123456789
+      VNPAY_TMN_CODE: ${VNPAY_TMN_CODE:-YOUR_TMN_CODE}
+      VNPAY_HASH_SECRET: ${VNPAY_HASH_SECRET:-YOUR_HASH_SECRET}
+      VNPAY_RETURN_URL: ${VNPAY_RETURN_URL:-http://localhost:5173/payment/result}
+    ports:
+      # Backend nghe 8090 trong container (SERVER_PORT mac dinh 8090) - host cung 8090
+      - "8090:8090"
+
+volumes:
+  postgres-data:
+  redis-data:
+  kafka-data:

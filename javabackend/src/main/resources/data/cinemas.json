@@ -1,0 +1,92 @@
+[
+ {
+  "name": "Cinestar Hiệp Phú (TP.HCM)",
+  "slug": "cinestar-hiep-phu-tp-hcm",
+  "address": "Trung tâm MM Mega Market Hiệp Phú, số 2 đường Trương Thị Hoa, Khu phố 3, Phường Tân Thới Hiệp, Thành phố Hồ Chí Minh, Việt Nam",
+  "city": "Hồ Chí Minh",
+  "hotline": "19000085",
+  "imageUrl": "/images/cinemas/cinestar-hiep-phu-tp-hcm.png",
+  "active": true
+ },
+ {
+  "name": "Cinestar Quốc Thanh (TP.HCM)",
+  "slug": "cinestar-quoc-thanh-tp-hcm",
+  "address": "271 Nguyễn Trãi, Phường Cầu Ông Lãnh, Thành Phố Hồ Chí Minh",
+  "city": "Hồ Chí Minh",
+  "hotline": "19000085",
+  "imageUrl": "/images/cinemas/cinestar-quoc-thanh-tp-hcm.jpg",
+  "active": true
+ },
+ {
+  "name": "Cinestar Parkcity Hà Nội",
+  "slug": "cinestar-parkcity-ha-noi",
+  "address": "Tầng 3TTTM The LinC, Khu đô thị ParkCity Hà Nội, 165 Lê Trọng Tấn, P. Dương Nội, Hà Nội",
+  "city": "Hà Nội",
+  "hotline": "19000085",
+  "imageUrl": "/images/cinemas/cinestar-parkcity-ha-noi.jpg",
+  "active": true
+ },
+ {
+  "name": "Cinestar Sinh Viên (TP.HCM)",
+  "slug": "cinestar-sinh-vien-tp-hcm",
+  "address": "Nhà văn hóa sinh viên - Đại học Quốc gia HCM, P. Đông Hòa, TP. HCM",
+  "city": "Hồ Chí Minh",
+  "hotline": "19000085",
+  "imageUrl": "/images/cinemas/cinestar-sinh-vien-tp-hcm.jpg",
+  "active": true
+ },
+ {
+  "name": "Cinestar Huế (TP. Huế)",
+  "slug": "cinestar-hue-tp-hue",
+  "address": "25 Hai Bà Trưng, Phường Thuận Hoá, TP. Huế",
+  "city": "Huế",
+  "hotline": "19000085",
+  "imageUrl": "/images/cinemas/cinestar-hue-tp-hue.jpg",
+  "active": true
+ },
+ {
+  "name": "Cinestar Kiên Giang (Rạch Sỏi)",
+  "slug": "cinestar-kien-giang-rach-soi",
+  "address": "Lô A2 - Khu 2 Trung tâm Thương mại Rạch Sỏi, Đường Nguyễn Chí Thanh, Phường Rạch Sỏi, Thành phố Rạch Giá, Tỉnh Kiên Giang",
+  "city": "Kiên Giang",
+  "hotline": "02977306588",
+  "imageUrl": "/images/cinemas/cinestar-kien-giang-rach-soi.jpg",
+  "active": true
+ },
+ {
+  "name": "Cinestar Đà Lạt (Lâm Đồng)",
+  "slug": "cinestar-da-lat-lam-dong",
+  "address": "Quảng trường Lâm Viên, Phường Xuân Hương - Đà Lạt, tỉnh Lâm Đồng",
+  "city": "Đà Lạt",
+  "hotline": "19000085",
+  "imageUrl": "/images/cinemas/cinestar-da-lat-lam-dong.jpg",
+  "active": true
+ },
+ {
+  "name": "Cinestar Lâm Đồng (Đức Trọng)",
+  "slug": "cinestar-lam-dong-duc-trong",
+  "address": "Tầng 4, Trung tâm Thương mại và Dịch vụ tài chính Sacombank, 713 Quốc lộ 20, Xã Đức Trọng, Tỉnh Lâm Đồng",
+  "city": "Lâm Đồng",
+  "hotline": "19000085",
+  "imageUrl": "/images/cinemas/cinestar-lam-dong-duc-trong.jpg",
+  "active": true
+ },
+ {
+  "name": "Cinestar Mỹ Tho (Đồng Tháp)",
+  "slug": "cinestar-my-tho-dong-thap",
+  "address": "52 Đinh Bộ Lĩnh, Phường Mỹ Tho, tỉnh Đồng Tháp",
+  "city": "Đồng Tháp",
+  "hotline": "19000085",
+  "imageUrl": "/images/cinemas/cinestar-my-tho-dong-thap.jpg",
+  "active": true
+ },
+ {
+  "name": "Cinestar Satra Quận 6 (TP.HCM)",
+  "slug": "cinestar-satra-quan-6-tp-hcm",
+  "address": "Tầng 6, TTTM Centre Mall, 1466 Võ Văn Kiệt, Phường Bình Tiên, TP. HCM",
+  "city": "Hồ Chí Minh",
+  "hotline": "19000085",
+  "imageUrl": "/images/cinemas/cinestar-satra-quan-6-tp-hcm.png",
+  "active": true
+ }
+]

@@ -1,0 +1,99 @@
+spring:
+  application:
+    name: cinestar-backend
+
+  datasource:
+    # Chay local: port 5433 (container map 5433->5432 de tranh PostgreSQL cua Windows).
+    # Trong docker-compose, backend ket noi truc tiep qua ten service postgres:5432.
+    url: ${DB_URL:jdbc:postgresql://localhost:5433/cinestar}
+    username: ${DB_USERNAME:cinestar}
+    password: ${DB_PASSWORD:cinestar}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        # KHONG dat hibernate.jdbc.time_zone: LocalDateTime phai duoc JDBC
+        # truyen as-is, neu dat se bi lech +7 gio khi JVM chay o TZ khac (Docker UTC)
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      timeout: 3000
+
+  cache:
+    type: redis
+
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+    consumer:
+      group-id: cinestar-app
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
+        spring.json.trusted.packages: com.cinestar.*
+        spring.json.value.default.type: com.cinestar.kafka.BookingEvent
+
+  mail:
+    host: ${MAIL_HOST:}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+
+server:
+  # Ưu tiên PORT (Render/Railway cấp tự động) -> SERVER_PORT -> 8090 (local)
+  port: ${PORT:${SERVER_PORT:8090}}
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha
+    doc-expansion: none
+
+app:
+  jwt:
+    # Dung luong toi thieu 32 byte cho HS256
+    secret: ${JWT_SECRET:cinestar-demo-secret-key-change-me-in-production-0123456789}
+    access-token-expiration-ms: 900000        # 15 phut
+    refresh-token-expiration-ms: 604800000    # 7 ngay
+  cors:
+    allowed-origins: ${CORS_ORIGINS:http://localhost:5173,http://localhost:19006,http://localhost:3000}
+  booking:
+    hold-minutes: 5          # thoi gian giu ghe khi chua thanh toan
+  mail:
+    from: ${MAIL_FROM:no-reply@cinestar.local}
+
+vnpay:
+  # Dang ky sandbox tai https://sandbox.vnpayment.vn/devreg/
+  tmn-code: ${VNPAY_TMN_CODE:YOUR_TMN_CODE}
+  hash-secret: ${VNPAY_HASH_SECRET:YOUR_HASH_SECRET}
+  payment-url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
+  api-url: https://sandbox.vnpayment.vn/merchant_webapi/api/transaction
+  return-url: ${VNPAY_RETURN_URL:http://localhost:5173/payment/result}
+  # IPN chi dung khi backend co public domain; localhost thi frontend goi /return thay the
+  ipn-url: ${VNPAY_IPN_URL:}
+
+logging:
+  level:
+    com.cinestar: INFO
+    org.hibernate.SQL: WARN
